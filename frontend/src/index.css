@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply min-h-screen bg-lavender-50 font-sans text-ink antialiased;
+    background-image:
+      radial-gradient(
+        ellipse 85% 55% at 50% -25%,
+        color-mix(in srgb, var(--color-lavender, #c8b6e2) 45%, transparent),
+        transparent
+      ),
+      radial-gradient(
+        ellipse 55% 45% at 100% 0%,
+        color-mix(in srgb, var(--color-dusty, #afc6e9) 35%, transparent),
+        transparent
+      ),
+      radial-gradient(
+        ellipse 50% 40% at 0% 100%,
+        color-mix(in srgb, var(--color-blush, #f3c6d3) 25%, transparent),
+        transparent
+      );
+  }
+
+  :root {
+    --color-lavender: #c8b6e2;
+    --color-plum: #4b3f5c;
+    --color-blush: #f3c6d3;
+    --color-dusty: #afc6e9;
+    --color-sage: #bfd8c2;
+  }
+}
+
+::selection {
+  @apply bg-dusty/50 text-ink;
+}

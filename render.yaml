@@ -1,0 +1,14 @@
+# Render: service runs the Express API in /backend
+services:
+  - type: web
+    name: althea-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: CLIENT_ORIGIN
+        sync: false
