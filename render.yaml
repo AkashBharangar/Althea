@@ -1,4 +1,5 @@
-# Render: service runs the Express API in /backend
+# Blueprint: https://render.com/docs/blueprint-spec
+# Deploy the API from the `backend` directory.
 services:
   - type: web
     name: althea-api
@@ -7,8 +8,11 @@ services:
     rootDir: backend
     buildCommand: npm install
     startCommand: npm start
+    healthCheckPath: /api/health
     envVars:
       - key: NODE_VERSION
         value: "20"
       - key: CLIENT_ORIGIN
+        sync: false
+      - key: ALLOW_VERCEL_PREVIEWS
         sync: false

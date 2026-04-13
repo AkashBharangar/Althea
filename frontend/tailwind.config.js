@@ -80,8 +80,14 @@ export default {
         ],
       },
       boxShadow: {
-        soft: "0 4px 24px -4px rgba(75, 63, 92, 0.12)",
-        card: "0 8px 32px -8px rgba(75, 63, 92, 0.16)",
+        soft: "0 4px 24px -4px rgba(75, 63, 92, 0.1)",
+        card: "0 8px 32px -8px rgba(75, 63, 92, 0.14)",
+        premium:
+          "0 2px 8px -2px rgba(75, 63, 92, 0.06), 0 24px 48px -12px rgba(75, 63, 92, 0.12)",
+        float: "0 12px 40px -16px rgba(75, 63, 92, 0.14)",
+      },
+      letterSpacing: {
+        capsule: "0.22em",
       },
       backdropBlur: {
         xs: "2px",

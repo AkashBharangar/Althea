@@ -1,15 +1,21 @@
 # Dependencies
 node_modules/
 
-# Environment (keep .env.example in repo)
+# Environment (keep *.env.example in repo)
 .env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
 .env.local
 .env.*.local
 .env.development.local
 .env.test.local
 .env.production.local
+.envrc
 
-# Build output
+# Build output (never commit; CI/hosting builds fresh)
 dist/
 build/
 
@@ -31,10 +37,21 @@ coverage/
 
 # Caches
 .cache/
+.parcel-cache/
 .turbo/
 *.tsbuildinfo
 .eslintcache
 .stylelintcache
+
+# Local temp / scratch
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Merge / editor backups
+*.orig
+*.bak
 
 # Deployment / hosting (local CLI state)
 .vercel/
@@ -42,7 +59,21 @@ coverage/
 # OS
 .DS_Store
 Thumbs.db
+ehthumbs.db
 Desktop.ini
+$RECYCLE.BIN/
+
+# Secrets & credentials (never commit)
+*.pem
+*.p12
+*.pfx
+id_rsa
+id_rsa.pub
+*.keystore
+
+# Tooling / crashes
+.sentryclirc
+*.stackdump
 
 # Editors & IDEs
 .idea/
