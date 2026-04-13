@@ -42,7 +42,28 @@ It is **not** a clinical or therapeutic product. It does not interpret your ment
 ---
 
 ## Project Structure
-althea/ ├── frontend/ # Vite + React SPA (Vercel) │ ├── src/ │ │ ├── components/ │ │ └── lib/ │ └── public/ ├── backend/ # Express API (Render) │ └── src/ │ ├── routes/ │ ├── services/ │ └── utils/ ├── package.json # Root scripts (concurrent dev, full build) ├── render.yaml # Render blueprint (optional) └── DEPLOYMENT.md # Vercel + Render checklist
+
+```
+althea/
+├── frontend/              # Vite + React SPA (Vercel)
+│   ├── src/
+│   │   ├── components/
+│   │   │   └── ui/
+│   │   └── lib/
+│   ├── public/
+│   ├── vite.config.js
+│   └── tailwind.config.js
+├── backend/               # Express API (Render)
+│   └── src/
+│       ├── routes/
+│       ├── services/
+│       └── utils/
+├── package.json           # Root scripts (concurrent dev, full build)
+├── render.yaml            # Render blueprint
+├── DEPLOYMENT.md          # Vercel + Render checklist
+├── LICENSE
+└── README.md
+```
 
 ---
 
@@ -57,63 +78,101 @@ althea/ ├── frontend/ # Vite + React SPA (Vercel) │ ├── src/ │ �
    ```bash
    npm install
    npm run install:all
-   (install:all installs frontend and backend packages.)
+   ```
 
-Environment files
+   `install:all` installs dependencies for both `frontend` and `backend`.
 
-Copy backend/.env.example to backend/.env and adjust if needed. For local dev, CLIENT_ORIGIN=http://localhost:5173 is typical.
-Optionally copy frontend/.env.example to frontend/.env. For local development you can leave VITE_API_URL unset; Vite proxies /api to the backend (see frontend/vite.config.js).
-Run both apps
-npm run dev
-Frontend: http://localhost:5173
-Backend: default port 8787 (or PORT from backend/.env)
-Build (production-style)
+3. **Environment files**
 
-npm run build
-API quick check
+   - Copy `backend/.env.example` to `backend/.env` and adjust if needed. For local dev, `CLIENT_ORIGIN=http://localhost:5173` is typical.
+   - Optionally copy `frontend/.env.example` to `frontend/.env`. For local development you can leave `VITE_API_URL` unset; Vite proxies `/api` to the backend (see `frontend/vite.config.js`).
 
-Health: GET /api/health
-Analyze: POST /api/analyze with JSON body { "text": "Your journal or chat excerpt here." } (max length enforced in backend/src/routes/analyze.js).
-System Flow
-The browser sends the user’s text to the API.
-The backend splits the text into sentences and scores each with the sentiment lexicon.
-Compromise helps extract noun-like cues; those are ranked against sentence scores to highlight recurring themes that skew with lower sentiment.
-A small reflection layer turns aggregate metrics into fixed, observational templates (no free-form generative “advice”).
-The frontend renders a timeline, tags, and cards from that structured JSON.
-Deployment
-Frontend (Vercel): Set the project root to frontend. Build: npm run build, output: dist. Set VITE_API_URL to your public API URL (no trailing slash).
-Backend (Render): Root directory backend; npm install and npm start. Set CLIENT_ORIGIN to your Vercel origin(s). Optional: ALLOW_VERCEL_PREVIEWS=1 for *.vercel.app previews. Health check path: /api/health.
-Step-by-step notes live in DEPLOYMENT.md.
+4. **Run both apps**
 
-Limitations
-English-centric — The compromise pipeline and sentiment lexicon are oriented toward English; other languages will not behave reliably.
-Lexicon sentiment is shallow — Sarcasm, mixed emotions, and domain-specific nuance are easy to misread.
-Triggers are statistical, not causal — A word appearing near lower scores is correlation in this text, not proof of a life pattern.
-No accounts or persistence in the current shape — text is processed for the request; long-term storage is a product decision you would add explicitly.
-Not for emergencies — If someone is at risk, they need real people and professional help, not an app.
-Roadmap
-Optional auth and encrypted storage for people who want history on their own terms.
-Stronger linguistic handling (negation, contrast, longer documents) within the same “no advice” boundary.
-Export (e.g., Markdown/PDF) for personal archives.
-Accessibility pass (motion-reduced paths, screen reader tuning).
-Automated tests around the analyze pipeline and API contracts.
-Ethical Positioning
-Althea is a language mirror, not a caregiver.
+   ```bash
+   npm run dev
+   ```
 
-It must not present itself as therapy, counseling, or medical care.
-It must not output diagnosis, treatment suggestions, or instructions about medication, relationships, or safety decisions.
-It should use neutral, observational language and invite the human to decide what, if anything, the output means for them.
-Anyone shipping a fork for real users should add clear disclaimers, age-appropriate flows where relevant, and a path to human crisis resources where the law or context requires it.
-If you extend the product, keep the boundary between describing text and directing a life explicit in both UX and copy.
+   - Frontend: [http://localhost:5173](http://localhost:5173)
+   - Backend: default port **8787** (or `PORT` from `backend/.env`)
 
-Why This Project Matters
-Althea is a full-stack exercise in building something people might actually open when they are tired: fast feedback loops, honest limits, and deployment to real hosts. It shows comfort with React and modern tooling, a small but coherent API design, and integration of open-source NLP without outsourcing judgment to a proprietary chat model. For teams that care about responsible product framing, the README and the code are meant to read as intentional, not accidental.
+5. **Build (production-style)**
 
-Contributing
-Issues and pull requests are welcome. Please keep changes aligned with the non-clinical, non-advisory positioning. For larger features, open an issue first so scope and ethics constraints stay aligned.
+   ```bash
+   npm run build
+   ```
 
-License
-MIT — add a LICENSE file (for example, the standard MIT license text) so the terms match how you distribute the code.
+6. **API quick check**
+
+   - Health: `GET /api/health`
+   - Analyze: `POST /api/analyze` with JSON body `{ "text": "Your journal or chat excerpt here." }` (max length enforced in `backend/src/routes/analyze.js`).
 
 ---
-To have this file created for you automatically in the repo, switch to **Agent mode** and ask again to add `README.md`.
+
+## System Flow
+
+1. The browser sends the user’s text to the API.
+2. The backend splits the text into sentences and scores each with the sentiment lexicon.
+3. **Compromise** helps extract noun-like cues; those are ranked against sentence scores to highlight recurring themes that skew with lower sentiment.
+4. A small reflection layer turns aggregate metrics into fixed, observational templates (no free-form generative “advice”).
+5. The frontend renders a timeline, tags, and cards from that structured JSON.
+
+---
+
+## Deployment
+
+- **Frontend (Vercel):** Set the project root to `frontend`. Build: `npm run build`, output: `dist`. Set `VITE_API_URL` to your public API URL (no trailing slash).
+- **Backend (Render):** Root directory `backend`; `npm install` and `npm start`. Set `CLIENT_ORIGIN` to your Vercel origin(s). Optional: `ALLOW_VERCEL_PREVIEWS=1` for `*.vercel.app` previews. Health check path: `/api/health`.
+
+Step-by-step notes live in **`DEPLOYMENT.md`**.
+
+---
+
+## Limitations
+
+- **English-centric** — The `compromise` pipeline and sentiment lexicon are oriented toward English; other languages will not behave reliably.
+- **Lexicon sentiment is shallow** — Sarcasm, mixed emotions, and domain-specific nuance are easy to misread.
+- **Triggers are statistical, not causal** — A word appearing near lower scores is correlation in *this* text, not proof of a life pattern.
+- **No accounts or persistence** in the current shape — text is processed for the request; long-term storage is a product decision you would add explicitly.
+- **Not for emergencies** — If someone is at risk, they need real people and professional help, not an app.
+
+---
+
+## Roadmap
+
+- Optional auth and encrypted storage for people who want history on their own terms.
+- Stronger linguistic handling (negation, contrast, longer documents) within the same “no advice” boundary.
+- Export (e.g., Markdown/PDF) for personal archives.
+- Accessibility pass (motion-reduced paths, screen reader tuning).
+- Automated tests around the analyze pipeline and API contracts.
+
+---
+
+## Ethical Positioning
+
+Althea is a **language mirror**, not a caregiver.
+
+- It **must not** present itself as therapy, counseling, or medical care.
+- It **must not** output diagnosis, treatment suggestions, or instructions about medication, relationships, or safety decisions.
+- It **should** use neutral, observational language and invite the human to decide what, if anything, the output means for them.
+- Anyone shipping a fork for real users should add clear disclaimers, age-appropriate flows where relevant, and a path to human crisis resources where the law or context requires it.
+
+If you extend the product, keep the boundary between **describing text** and **directing a life** explicit in both UX and copy.
+
+---
+
+## Why This Project Matters
+
+Althea is a full-stack exercise in building something people might actually open when they are tired: fast feedback loops, honest limits, and deployment to real hosts. It shows comfort with React and modern tooling, a small but coherent API design, and integration of open-source NLP without outsourcing judgment to a proprietary chat model. For teams that care about **responsible product framing**, the README and the code are meant to read as intentional, not accidental.
+
+---
+
+## Contributing
+
+Issues and pull requests are welcome. Please keep changes aligned with the non-clinical, non-advisory positioning. For larger features, open an issue first so scope and ethics constraints stay aligned.
+
+---
+
+## License
+
+[MIT](LICENSE)
