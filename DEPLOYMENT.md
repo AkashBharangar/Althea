@@ -61,7 +61,7 @@ The browser calls the Render API directly from the Vite app using `VITE_API_URL`
 | **Render** `ALLOW_VERCEL_PREVIEWS` | `1` if you need arbitrary `*.vercel.app` previews; otherwise omit |
 | **Vercel** `VITE_API_URL` | Your Render API base URL (no `/api` suffix) |
 
-Rules implemented in `backend/src/server.js`:
+Rules implemented in `backend/src/app.js`:
 
 - Requests **without** an `Origin` header (e.g. curl, health checks) are allowed.
 - Requests whose `Origin` is in `CLIENT_ORIGIN` (comma-separated list) are allowed.
@@ -106,4 +106,4 @@ After changing `CLIENT_ORIGIN` on Render, **redeploy** or restart the service so
 | `frontend/.env.example` | Documents `VITE_API_URL` |
 | `backend/.env.example` | Documents `CLIENT_ORIGIN`, `ALLOW_VERCEL_PREVIEWS` |
 | `render.yaml` | Render Blueprint + health check |
-| `backend/src/server.js` | CORS allowlist + optional Vercel previews |
+| `backend/src/app.js` | CORS allowlist + optional Vercel previews |

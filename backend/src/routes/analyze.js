@@ -1,11 +1,14 @@
 import { Router } from "express";
 import { analyzeText } from "../services/analyzeService.js";
+import { attachUserIfPresent } from "../middleware/auth.js";
+import { persistEntryWithAnalysis } from "../services/entryPersistenceService.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 const router = Router();
 
 const MAX_TEXT_LEN = 12_000;
 
-router.post("/analyze", (req, res) => {
+router.post("/analyze", attachUserIfPresent, asyncHandler(async (req, res) => {
   const body = req.body || {};
 
   if (typeof body.text !== "string") {
@@ -27,15 +30,20 @@ router.post("/analyze", (req, res) => {
     });
   }
 
-  try {
-    const result = analyzeText(text);
-    res.json(result);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({
-      error: "Something went wrong on our side. You can try again in a moment.",
+  const result = analyzeText(text);
+
+  if (req.user?.id) {
+    const { entryId } = await persistEntryWithAnalysis({
+      userId: req.user.id,
+      userEmail: req.user.email,
+      rawText: text,
+      source: "MANUAL",
+      analysis: result,
     });
+    return res.json({ ...result, entryId });
   }
-});
+
+  return res.json(result);
+}));
 
 export default router;
