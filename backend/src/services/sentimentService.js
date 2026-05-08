@@ -20,6 +20,9 @@ export function analyzeSentence(sentence) {
   };
 }
 
+// Domain-friendly alias for service consumers.
+export const scoreSentence = analyzeSentence;
+
 /**
  * Sentiment package: score < 0 → net negative lexicon in that span.
  * @param {{ score: number }} result
@@ -27,3 +30,6 @@ export function analyzeSentence(sentence) {
 export function isNegativeSentence(result) {
   return result.score < 0;
 }
+
+// Domain-friendly alias for service consumers.
+export const isNetNegativeSentence = isNegativeSentence;

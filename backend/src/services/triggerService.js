@@ -38,6 +38,9 @@ export function extractTriggerRanks(negativeSentences, maxTriggers = 12) {
     .map(([word, count]) => ({ word, count }));
 }
 
+// Domain-friendly alias for service consumers.
+export const rankTriggerTerms = extractTriggerRanks;
+
 /**
  * @param {string[]} negativeSentences
  * @param {number} maxTriggers
